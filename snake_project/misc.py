@@ -10,6 +10,3 @@ class Direction(Enum):
     DOWN = 4
     
 Point = namedtuple('Point', 'x, y')
-
-BLOCK_SIZE = 20
-SPEED = 20
