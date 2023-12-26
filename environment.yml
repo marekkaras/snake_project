@@ -1,0 +1,12 @@
+name: snake_project
+channels:
+    - defaults
+dependencies:
+    - python=3.9
+    - pip
+    - sqlalchemy
+    - pytorch
+    - matplotlib
+    - ipython
+    - pip:
+        - pygame
