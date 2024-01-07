@@ -15,8 +15,6 @@ def run_kain(seed: int, speed: int, how_many_games: int):
     record = 0
     n_games = 0
     
-    agent = None
-    game = None
     agent = Kain()
     game = GameBase(randomseed=seed, speed=speed)
     
@@ -27,9 +25,11 @@ def run_kain(seed: int, speed: int, how_many_games: int):
         seed += 1
     
     for seed, current_game in zip(seeds, range(0, int(how_many_games))):
+        
         if not agent and not game:
             agent = Kain()
             game = GameBase(randomseed=seed, speed=speed)
+        
         logger.info(f'Kain playing game using seed: {seed}. Game number: {current_game}')
         
         game.randomseed = seed

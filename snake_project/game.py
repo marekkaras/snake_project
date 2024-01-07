@@ -10,12 +10,14 @@ font = pygame.font.SysFont(None, 25)
 
 class GameBase:
     
-    def __init__(self, w=640, h=480, randomseed=1, speed=20, block_size=20):
+    def __init__(self, w=640, h=480, randomseed=1, speed=20, block_size=20,
+                 neg_reward=-10, pos_reward=10):
         
         #  Set random seed for replayability
         random.seed(randomseed)
         self.randomseed = int(randomseed)
-    
+        self.neg_reward = neg_reward
+        self.pos_reward = pos_reward
         self.w = w
         self.h = h
         self.speed = int(speed)
@@ -39,6 +41,7 @@ class GameBase:
                       Point(self.head.x-(2*self.block_size), self.head.y)]
 
         self.score = 0
+        self.max_moves = 999
         self.food = None
         self.walls = []
         self.insert_walls()
@@ -126,8 +129,10 @@ class GameBase:
                          pygame.Rect(self.food.x+4, self.food.y+4, 12, 12))
         
         #  Draw score
-        text = font.render("Score: " + str(self.score), True, WHITE)
-        self.display.blit(text, [self.w/2 - 2 * self.block_size, 0])
+        text_score = font.render("Score: " + str(self.score), True, WHITE)
+        text_moves = font.render("Moves left: " + str(self.max_moves), True, WHITE)
+        self.display.blit(text_score, [self.w/2 - 6 * self.block_size, 0])
+        self.display.blit(text_moves, [self.w/2 + 2 * self.block_size, 0])
         pygame.display.flip()
         
     def input_from_human(self):
@@ -180,6 +185,13 @@ class GameBase:
         
     def play_step(self, action=None):
         
+        self.max_moves -= 1
+        
+        if self.max_moves < 0:
+            game_over = True
+            reward = -20
+            return reward, game_over, self.score
+        
         #  If human moves take input from human
         #  otherwise process input from AI
         if not action:
@@ -196,13 +208,13 @@ class GameBase:
         game_over = False
         if self.is_collision() or self.frame_iteration > 100*len(self.snake):
             game_over = True
-            reward = -10
+            reward = self.neg_reward
             return reward, game_over, self.score
             
         #  Insert food if coords == head, else make move for render
         if self.head == self.food:
             self.score += 1
-            reward = 10
+            reward = self.pos_reward
             self.insert_food()
         else:
             self.snake.pop()
