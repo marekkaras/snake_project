@@ -22,7 +22,8 @@ def run_abel(seed: int, how_many_seeds: int, speed: int, how_many_games: int,
         seed += 1
         
     agent = Abel(games_to_play=int(how_many_seeds) * int(how_many_games),
-                 model_from_file='stage2_10_100_final.pth')
+                 model_from_file='stage5_maxmean.pth',
+                 hidden_layers=512)
     agent_timestamp = datetime.datetime.now().timestamp()
     agent_timestamp_as_bytes = str.encode(str(agent_timestamp))
     h = hashlib.sha3_512()

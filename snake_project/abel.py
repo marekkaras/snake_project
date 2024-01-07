@@ -10,14 +10,18 @@ class Abel:
 
     def __init__(self, games_to_play: int, 
                  model_from_file=None, 
-                 hidden_layers=256):
+                 hidden_layers: int = 512,
+                 batch_size: int = 1000,
+                 learning_rate: float = 0.001,
+                 gamma: float = 0.9,
+                 ):
         self.max_memory = 100_000
-        self.batch_size = 1000
-        self.learning_rate = 0.001
+        self.batch_size = batch_size
+        self.learning_rate = learning_rate
         self.games_to_play = games_to_play
         self.n_games = 0
         self.epsilon = 0 # randomness
-        self.gamma = 0.9 # discount rate
+        self.gamma = gamma # discount rate
         self.memory = deque(maxlen=self.max_memory) # popleft()
         self.model = Linear_QNet(11, hidden_layers, 3)
         self.trainer = QTrainer(self.model, 
