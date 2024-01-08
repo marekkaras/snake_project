@@ -1,4 +1,5 @@
 import argparse
+import pandas as pd
 
 from snake_project.game import GameBase
 from snake_project.helper import plot
@@ -56,6 +57,12 @@ def run_kain(seed: int, speed: int, how_many_games: int):
                 plot_mean_scores.append(mean_score)
                 plot(plot_scores, plot_mean_scores)   
                 break
+    data = {'scores': plot_scores, 'mean_scores': plot_mean_scores} 
+    training_results = pd.DataFrame(data)
+    training_results['agent_hash'] = 'kain'
+    training_results.to_csv(f'test_kain.csv')
+    print(training_results)
+    input("Press button to continue...")
     input("Press button to continue...")
     return
 

@@ -11,8 +11,7 @@ import datetime
 import pandas as pd
     
 
-def run_abel(seed: int, how_many_seeds: int, speed: int, how_many_games: int,
-             rewards = list):
+def run_abel(seed: int, how_many_seeds: int, speed: int, how_many_games: int):
     
     
     seed = int(seed)
@@ -22,7 +21,7 @@ def run_abel(seed: int, how_many_seeds: int, speed: int, how_many_games: int,
         seed += 1
         
     agent = Abel(games_to_play=int(how_many_seeds) * int(how_many_games),
-                 model_from_file='stage5_maxmean.pth',
+                 model_from_file='final_model.pth',
                  hidden_layers=512)
     agent_timestamp = datetime.datetime.now().timestamp()
     agent_timestamp_as_bytes = str.encode(str(agent_timestamp))
@@ -43,12 +42,6 @@ def run_abel(seed: int, how_many_seeds: int, speed: int, how_many_games: int,
                         speed=speed, 
                         neg_reward=-10,
                         pos_reward=27)
-        
-        starting_timestamp = datetime.datetime.now().timestamp()
-        starting_timestamp_as_bytes = str.encode(str(starting_timestamp))
-        h = hashlib.sha3_512()
-        h.update(starting_timestamp_as_bytes)
-        game_hash = h.hexdigest()
         
         logger.info(f'Abel playing game using rewards: -10, 27')
         
@@ -84,15 +77,8 @@ def run_abel(seed: int, how_many_seeds: int, speed: int, how_many_games: int,
                     break
     data = {'ts': timestamps, 'scores': plot_scores, 'mean_scores': plot_mean_scores} 
     training_results = pd.DataFrame(data)
-    training_results['game_hash'] = game_hash
-    training_results['starting_timestamp'] = starting_timestamp
-    training_results['negative_reward'] = -10
-    training_results['positive_reward'] = 27
-    training_results['seed'] = seed
-    training_results['how_many_seeds'] = how_many_seeds
-    training_results['how_many_games'] = how_many_games
-    training_results['speed'] = speed
-    training_results.to_csv(f'{agent_hash}.csv')
+    training_results['agent_hash'] = agent_hash
+    training_results.to_csv(f'test_abel.csv')
     print(training_results)
     input("Press button to continue...")
     return
