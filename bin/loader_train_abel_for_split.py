@@ -14,7 +14,6 @@ import pandas as pd
 def run_abel(seed: int, how_many_seeds: int, speed: int, how_many_games: int,
              rewards = list):
     
-    
     seed = int(seed)
     seeds = []
     for i in range(0, int(how_many_seeds)):
@@ -36,29 +35,21 @@ def run_abel(seed: int, how_many_seeds: int, speed: int, how_many_games: int,
     n_games = 0
     
     for seed in seeds:
-        
         game = GameBase(randomseed=seed, 
                         speed=speed, 
                         neg_reward=-10,
                         pos_reward=27)
-        
         starting_timestamp = datetime.datetime.now().timestamp()
         starting_timestamp_as_bytes = str.encode(str(starting_timestamp))
         h = hashlib.sha3_512()
         h.update(starting_timestamp_as_bytes)
         game_hash = h.hexdigest()
-        
         logger.info(f'Abel playing game using rewards: -10, 27')
-        
         for current_game in range(0, int(how_many_games)):
-            
             logger.info(f'Abel playing game using seed: {seed}. Game number: {current_game}')
-
             game.randomseed = seed
             game.setup_game()
-            
             while True:
-                
                 #  Make moves
                 current_state = game.get_state()
                 final_move = agent.get_action(current_state)
@@ -74,20 +65,15 @@ def run_abel(seed: int, how_many_seeds: int, speed: int, how_many_games: int,
                                reward, 
                                state_after_move, 
                                game_over)
-                
                 if game_over:
                     n_games += 1
                     agent.n_games += 1
-                    #agent.train_long_memory()
-        
                     if score > record:
                         agent.train_long_memory()
                         logger.info(f'Saving new model since {score} > {record}')
                         record = score
                         agent.model.save(file_name=f'{agent_hash}_{how_many_seeds}_{how_many_games}_{record}.pth')
-        
                     logger.info(f'Game score: {score}. Record: {record}')
-        
                     plot_scores.append(score)
                     total_score += score
                     mean_score = total_score / n_games

@@ -2,7 +2,7 @@ import pygame
 import random
 import numpy as np
 
-from snake_project.colors import WHITE, RED1, RED2, GREEN1, GREEN2, BLACK, GRAY1, GRAY2
+from snake_project.colors import WHITE, RED1, RED2, GREEN1, GREEN2, BLACK, GRAY1, GRAY2, BLUE1, BLUE2
 from snake_project.misc import Direction, Point
 
 pygame.init()
@@ -11,7 +11,7 @@ font = pygame.font.SysFont(None, 25)
 class GameBase:
     
     def __init__(self, w=640, h=480, randomseed=1, speed=20, block_size=20,
-                 neg_reward=-10, pos_reward=10):
+                 neg_reward=-10, pos_reward=10,):
         
         #  Set random seed for replayability
         random.seed(randomseed)
@@ -27,10 +27,16 @@ class GameBase:
         pygame.display.set_caption('Snake')
         self.clock = pygame.time.Clock()
         
+        self.snake_color = 'green'
+        self.body_1 = BLUE1
+        self.body_2 = BLUE2
+            
         # init game state
         self.setup_game()
         
-    def setup_game(self):
+    def setup_game(self, snake_color='green'):
+        
+        self.snake_color = snake_color
         random.seed(self.randomseed)
         # init game state
         self.direction = Direction.RIGHT
@@ -108,11 +114,18 @@ class GameBase:
         #  Fill background
         self.display.fill(BLACK)
         
+        if self.snake_color == 'green':
+            self.body_1 = GREEN1
+            self.body_2 = GREEN2
+        else:
+            self.body_1 = BLUE1
+            self.body_2 = BLUE2
+        
         #  Draw snake
         for pt in self.snake:
-            pygame.draw.rect(self.display, GREEN1, 
+            pygame.draw.rect(self.display, self.body_1, 
                              pygame.Rect(pt.x, pt.y, self.block_size, self.block_size))
-            pygame.draw.rect(self.display, GREEN2, 
+            pygame.draw.rect(self.display, self.body_2, 
                              pygame.Rect(pt.x+4, pt.y+4, 12, 12))
         
         #  Draw walls

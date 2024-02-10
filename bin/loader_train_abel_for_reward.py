@@ -58,7 +58,6 @@ def run_abel(seed: int, how_many_seeds: int, speed: int, how_many_games: int,
                 game.setup_game()
                 
                 while True:
-                    
                     #  Make moves
                     current_state = game.get_state()
                     final_move = agent.get_action(current_state)
@@ -73,13 +72,10 @@ def run_abel(seed: int, how_many_seeds: int, speed: int, how_many_games: int,
                                    final_move, 
                                    reward, 
                                    state_after_move, 
-                                   game_over)
-                    
+                                   game_over)  
                     if game_over:
-                        n_games += 1
-                        
+                        n_games += 1         
                         agent.train_long_memory()
-            
                         if score > record:
                             logger.info(f'Saving new model since {score} > {record}')
                             record = score

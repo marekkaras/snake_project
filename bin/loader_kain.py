@@ -8,7 +8,6 @@ from snake_project.logs import logger
     
 
 def run_kain(seed: int, speed: int, how_many_games: int):
-    
     seed = int(seed)
     plot_scores = []
     plot_mean_scores = []
@@ -62,7 +61,6 @@ def run_kain(seed: int, speed: int, how_many_games: int):
     training_results['agent_hash'] = 'kain'
     training_results.to_csv(f'test_kain.csv')
     print(training_results)
-    input("Press button to continue...")
     input("Press button to continue...")
     return
 
